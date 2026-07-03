@@ -1,0 +1,9 @@
+@echo off
+echo Cleaning up old server instances on port 8000...
+FOR /F "tokens=5" %%a IN ('netstat -aon ^| findstr :8000') DO taskkill /F /PID %%a 2>nul
+echo Installing requirements...
+pip install -r requirements.txt
+
+echo Starting Cattle Breed Classifier...
+python app.py
+pause

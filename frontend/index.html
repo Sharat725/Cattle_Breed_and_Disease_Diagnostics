@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CattleVision AI – Breed & Disease Classifier</title>
+  <meta name="description" content="AI-powered Indian cattle breed identification and disease detection using Hybrid CNN + Vision Transformer technology." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <!-- Animated background -->
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand" aria-label="CattleVision AI">
+        <div class="nav-logo">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="15" stroke="url(#logoGrad)" stroke-width="2"/>
+            <path d="M10 20 Q16 10 22 20" stroke="url(#logoGrad)" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="13" cy="14" r="1.5" fill="url(#logoGrad)"/>
+            <circle cx="19" cy="14" r="1.5" fill="url(#logoGrad)"/>
+            <defs>
+              <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#4ade80"/>
+                <stop offset="100%" stop-color="#22d3ee"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="nav-name">CattleVision <em>AI</em></span>
+      </a>
+      <div class="nav-pills">
+        <span class="nav-pill active" id="pill-breeds">15 Breeds</span>
+        <span class="nav-pill" id="pill-diseases">3 Diseases</span>
+        <span class="nav-pill" id="pill-model">Hybrid CNN+ViT</span>
+      </div>
+      <div class="nav-status" id="nav-status">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-text">Connecting…</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main">
+
+    <!-- HERO -->
+    <section class="hero fade-in" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          AI-Powered Livestock Intelligence
+        </div>
+        <h1 id="hero-title" class="hero-title">
+          Identify Cattle Breeds<br/>
+          <span class="gradient-text">& Detect Disease</span>
+        </h1>
+        <p class="hero-desc">
+          Upload any cattle or buffalo image. Our hybrid deep-learning model — EfficientNet-B3 fused with Vision Transformer — returns breed identification and disease triage in seconds.
+        </p>
+        <div class="hero-chips">
+          <div class="hero-chip">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2z" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Real-time inference
+          </div>
+          <div class="hero-chip">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M3 10l4 4 10-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Top-5 breed confidence
+          </div>
+          <div class="hero-chip">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M9 2h2v2H9zM9 16h2v2H9zM2 9h2v2H2zM16 9h2v2h-2z" fill="currentColor"/><circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="1.5"/></svg>
+            Lightweight disease triage
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-ring hero-ring-1"></div>
+        <div class="hero-ring hero-ring-2"></div>
+        <div class="hero-ring hero-ring-3"></div>
+        <div class="hero-icon-wrap">
+          <svg class="hero-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="38" fill="url(#heroFill)" opacity="0.12"/>
+            <path d="M22 52 Q40 24 58 52" stroke="url(#heroStroke)" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="35" r="4" fill="url(#heroStroke)"/>
+            <circle cx="48" cy="35" r="4" fill="url(#heroStroke)"/>
+            <path d="M36 48h8M34 44h12" stroke="url(#heroStroke)" stroke-width="2" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="heroFill" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#4ade80"/>
+                <stop offset="1" stop-color="#22d3ee"/>
+              </linearGradient>
+              <linearGradient id="heroStroke" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#4ade80"/>
+                <stop offset="1" stop-color="#22d3ee"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANALYZER SECTION -->
+    <section class="analyzer-section" id="analyzer" aria-label="Image Analyzer">
+      <div class="analyzer-grid">
+
+        <!-- UPLOAD PANEL -->
+        <div class="panel glass fade-in" id="upload-panel">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <span class="panel-icon">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div>
+                <h2 class="panel-title">Image Analyzer</h2>
+                <p class="panel-subtitle">Drop your cattle image to begin analysis</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="upload-zone" id="upload-area" tabindex="0" role="button" aria-label="Upload cattle image">
+            <input id="file-input" type="file" accept="image/*" hidden />
+            <div class="upload-placeholder" id="upload-placeholder">
+              <div class="upload-icon-ring">
+                <svg class="upload-svg" viewBox="0 0 48 48" fill="none">
+                  <circle cx="24" cy="24" r="22" stroke="url(#uploadGrad)" stroke-width="1.5" stroke-dasharray="4 4"/>
+                  <path d="M24 32V18M18 24l6-6 6 6" stroke="url(#uploadGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <defs>
+                    <linearGradient id="uploadGrad" x1="2" y1="2" x2="46" y2="46" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#4ade80"/>
+                      <stop offset="1" stop-color="#22d3ee"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+              <p class="upload-primary">Drop image here or <span class="upload-link">browse</span></p>
+              <p class="upload-secondary">JPG, PNG, WEBP · Side-on, well-lit photos work best</p>
+            </div>
+            <div class="upload-preview-wrap hidden" id="upload-preview-wrap">
+              <div class="scan-lines" id="scan-lines" aria-hidden="true"></div>
+              <img id="preview-image" class="preview-img" alt="Cattle preview" />
+              <button class="remove-btn" id="clear-button" title="Remove image" aria-label="Remove image">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="upload-footer">
+            <button class="btn-primary" id="analyze-button" disabled>
+              <span class="btn-spinner hidden" id="btn-spinner" aria-hidden="true"></span>
+              <span id="btn-text">Analyze Image</span>
+            </button>
+            <p class="status-msg" id="processing-label">Upload an image to begin</p>
+          </div>
+        </div>
+
+        <!-- RESULTS COLUMN -->
+        <div class="results-col">
+
+          <!-- BREED RESULT -->
+          <div class="panel glass fade-in result-card" id="breed-panel">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <span class="panel-icon panel-icon--green">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" fill="currentColor" opacity=".7"/></svg>
+                </span>
+                <div>
+                  <h2 class="panel-title">Breed Intelligence</h2>
+                  <p class="panel-subtitle">Hybrid CNN + ViT · Top-5 predictions</p>
+                </div>
+              </div>
+              <span class="badge badge-green">CNN+ViT</span>
+            </div>
+            <div class="confidence-list" id="breed-stats">
+              <div class="empty-state">
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3" opacity=".3"/><path d="M24 16v8M24 30v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".4"/></svg>
+                <p>Awaiting analysis…</p>
+              </div>
+            </div>
+            <div class="narrative-box hidden" id="breed-narrative">
+              <div class="narrative-icon">
+                <svg viewBox="0 0 20 20" fill="none"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2z" stroke="currentColor" stroke-width="1.5"/><path d="M10 7v3l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div id="breed-info" class="narrative-text"></div>
+            </div>
+          </div>
+
+          <!-- DISEASE RESULT -->
+          <div class="panel glass fade-in result-card" id="disease-panel">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <span class="panel-icon panel-icon--amber">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01M10.29 3.86l-8.19 14A2 2 0 003.82 21h16.36a2 2 0 001.72-3l-8.19-14a2 2 0 00-3.46.14z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <div>
+                  <h2 class="panel-title">Disease Triage</h2>
+                  <p class="panel-subtitle">ConvNeXt · Risk assessment</p>
+                </div>
+              </div>
+              <span class="badge badge-amber">Triage</span>
+            </div>
+            <div class="confidence-list" id="disease-stats">
+              <div class="empty-state">
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3" opacity=".3"/><path d="M24 16v8M24 30v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".4"/></svg>
+                <p>Awaiting analysis…</p>
+              </div>
+            </div>
+            <div class="narrative-box hidden warning-box" id="disease-narrative">
+              <div class="narrative-icon">
+                <svg viewBox="0 0 20 20" fill="none"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2z" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v5M10 13h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div id="disease-info" class="narrative-text"></div>
+            </div>
+            <p class="disclaimer">⚠️ This is a decision aid only. Always confirm diagnosis with a licensed veterinarian.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- BREED KNOWLEDGE PANEL -->
+    <section class="knowledge-section fade-in" aria-labelledby="knowledge-title">
+      <div class="knowledge-header">
+        <h2 id="knowledge-title">Supported Breeds &amp; Characteristics</h2>
+        <p class="knowledge-desc">The model recognizes 15 Indian cattle and buffalo breeds across Zebu, draft, and riverine categories.</p>
+      </div>
+      <div class="breed-grid" id="breed-grid">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- TECH PANEL -->
+    <section class="tech-section fade-in" aria-labelledby="tech-title">
+      <h2 id="tech-title" class="tech-title">Model Architecture</h2>
+      <div class="tech-grid">
+        <div class="tech-card glass">
+          <div class="tech-icon tech-icon--blue">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/></svg>
+          </div>
+          <h3>EfficientNet-B3</h3>
+          <p>CNN backbone extracting 1536-D local texture and morphological features from the input image.</p>
+        </div>
+        <div class="tech-card glass">
+          <div class="tech-icon tech-icon--purple">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="3" fill="currentColor" opacity=".5"/></svg>
+          </div>
+          <h3>ViT-B/16</h3>
+          <p>Vision Transformer extracting 768-D global attention features, capturing long-range body structure.</p>
+        </div>
+        <div class="tech-card glass">
+          <div class="tech-icon tech-icon--green">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7h7l-5.5 4 2 7-6.5-4-6.5 4 2-7L2 9h7l3-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Hybrid Fusion</h3>
+          <p>CNN + ViT features are concatenated (2304-D) and passed through a 512-unit FC head with dropout.</p>
+        </div>
+        <div class="tech-card glass">
+          <div class="tech-icon tech-icon--amber">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>ConvNeXt Disease</h3>
+          <p>Separate ConvNeXt-Tiny model for disease triage: Foot-&-Mouth, Lumpy Skin, and Healthy classification.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-brand">CattleVision <em>AI</em></p>
+      <p class="footer-note">Built for veterinary research &amp; field diagnostics. Always confirm with a licensed veterinarian.</p>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+# ── Python ──────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+wheels/
+
+# ── Jupyter Notebooks ────────────────────────────
+.ipynb_checkpoints/
+
+# ── Model weights & large binaries ───────────────
+# The trained model files are very large — download/train separately
+*.pt
+*.pth
+*.onnx
+*.pkl
+*.bin
+
+# Model directories (unpacked PyTorch checkpoint folders)
+best_hybrid_model/
+best_efficientnet_b3/
+best_efficientnet_b3.pt/
+
+# Sample/test images
+*.jpg
+*.jpeg
+
+# ── Dataset / experiment outputs ─────────────────
+disease/confusion_matrix.png
+disease/per_class_metrics.png
+disease/training_curves.png
+disease/training_log.csv
+disease/final_results.csv
+disease/per_class_metrics.csv
+
+# ── Gradio cache ──────────────────────────────────
+.gradio/
+
+# ── Environment / secrets ──────────────────────────
+.env
+.env.*
+*.env
+
+# ── OS files ──────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDEs ──────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.user
+
+# ── Misc ──────────────────────────────────────────
+*.log
+*.tmp
+*.bak
+*.swp
+*~
